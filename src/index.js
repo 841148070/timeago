@@ -138,6 +138,8 @@ export default class TimeAgo extends Component<DefaultProps, Props, void> {
       days = format(parseDate.getDate()),
       months = format(parseDate.getMonth() + 1),
       year = parseDate.getFullYear();
+    
+    const yesterdayZero = new Date(moment(now - 100 * 60 * 60 * 24).format('YYYY-MM-DD 00:00:00')).valueOf();
 
     const value
       = seconds < MINUTE
@@ -146,7 +148,7 @@ export default class TimeAgo extends Component<DefaultProps, Props, void> {
         ? `${Math.round(seconds / MINUTE)}分钟前`
         : seconds < DAY
           ? `${Math.round(seconds / HOUR)}小时前`
-          : seconds < DAY * 2
+          : (seconds < DAY * 2 && then >= yesterdayZero)
             ? `昨天${hour}:${minutes}`
             : seconds < YEAR && year === new Date(now).getFullYear()
               ? `${months}-${days} ${hour}:${minutes}` 
